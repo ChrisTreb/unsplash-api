@@ -1,4 +1,3 @@
-const secretKey = "8PAN0iAqyU1vpskRLAzkE-vi81MEcmMmXKbMS_639yE";
 const accessKey = "?client_id=DRxbYNkvoVgaup7RK18bYF1BllSdFHCWzIyP-favtr4";
 const urlParameters = "&orientation=landscape&query=";
 const unsplashApiUrl = "https://api.unsplash.com/photos/";
