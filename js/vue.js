@@ -6,6 +6,7 @@ const loadingContainer = document.getElementById("loader");
 const imageContainer = document.getElementById("right");
 const menuContainer = document.getElementById("left");
 const hiddenImageSrc = document.getElementById("hidden-image");
+const message = document.getElementById("message");
 
 const colorThief = new ColorThief();
 const image = new Image();
@@ -21,7 +22,10 @@ window.addEventListener('load', function() {
 const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
     const hex = x.toString(16)
     return hex.length === 1 ? '0' + hex : hex
-}).join('')
+}).join('');
+
+// Function No image
+
 
 // First image
 function setFirstImage() {
@@ -30,23 +34,17 @@ function setFirstImage() {
     // Get new picture from Unsplash API
     let url = unsplashApiUrl + randomPicture + accessKey + urlParameters + urlImgTheme;
     let response = httpGet(url);
-    if (response != null || response != undefined) {
-        let json = JSON.parse(response);
-        // Get & set image 
-        let img = json.urls.raw;
-        setBgImage(img);
-        fade(loadingContainer);
-
-        image.src = hiddenImageSrc.getAttribute('src');
-        image.onload = function() {
-            var color = colorThief.getColor(hiddenImageSrc);
-            console.log("Test colors = " + "'rgb(" + color + ")'");
-            let arr = Array.from(color);
-            menuContainer.style.backgroundColor = rgbToHex(arr[0], arr[1], arr[2]);
-        };
-
-    } else {
-        console.log("Json => " + json);
+    try {
+        if (response != null || response != undefined) {
+            let json = JSON.parse(response);
+            // Get & set image 
+            let img = json.urls.raw;
+            setBgImage(img);
+            fade(loadingContainer);
+        }
+    } catch (e) {
+        console.log(e);
+        message.innerHTML = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
     }
 }
 
@@ -60,24 +58,27 @@ function changeTheme(theme, event) {
     console.log("THEME = " + theme);
     url = unsplashApiUrl + randomPicture + accessKey + urlParameters + theme;
     let response = httpGet(url);
-    if (response != null || response != undefined) {
-        let json = JSON.parse(response);
-        // Get & set image 
-        let img = json.urls.raw;
-        setBgImage(img);
-        fade(loadingContainer);
+    try {
+        if (response != null || response != undefined) {
+            let json = JSON.parse(response);
+            // Get & set image 
+            let img = json.urls.raw;
+            setBgImage(img);
+            fade(loadingContainer);
 
-        image.src = hiddenImageSrc.getAttribute('src');
-        image.onload = function() {
-            var color = colorThief.getColor(hiddenImageSrc);
-            console.log("Test colors = " + "'rgb(" + color + ")'");
-            let arr = Array.from(color);
-            menuContainer.style.backgroundColor = rgbToHex(arr[0], arr[1], arr[2]);
-        };
-
-    } else {
-        console.log("Json => " + json);
+            image.src = hiddenImageSrc.getAttribute('src');
+            image.onload = function() {
+                var color = colorThief.getColor(hiddenImageSrc);
+                console.log("Test colors = " + "'rgb(" + color + ")'");
+                let arr = Array.from(color);
+                menuContainer.style.backgroundColor = rgbToHex(arr[0], arr[1], arr[2]);
+            };
+        }
+    } catch (e) {
+        console.log(e);
+        message.innerHTML = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
     }
+
 }
 
 // Function get Response from URL
@@ -142,11 +143,7 @@ Vue.component('theme-item', {
 var appNav = new Vue({
     el: '#nav',
     data: {
-        buttonList: [
-            { id: 0, link: "#0", text: 'Projects' },
-            { id: 1, link: "#1", text: 'About me' },
-            { id: 2, link: "#2", text: 'Contact' }
-        ]
+        buttonList: []
     }
 });
 

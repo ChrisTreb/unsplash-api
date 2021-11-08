@@ -19,24 +19,17 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
     <link rel="icon" type="image/png" href="img/picture.png" />
-    <title>VUE JS</title>
+    <title>CTRL - Unsplash API</title>
 </head>
 
 <body>
     <section>
-
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4" id="left">
                 <nav id="nav">
                     <a href="#"><img src="img/picture.png" /></a>
                     <nav-item v-for="item in buttonList" v-bind:nav="item" v-bind:key="item.id"></nav-item>
                 </nav>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4" id="left">
-                <h1>Page Options</h1>
                 <div id="img-themes">
                     <h2>Change theme</h2>
                     <theme-item v-for="item in themeList" v-bind:theme="item" v-bind:key="item.id"></theme-item>
@@ -53,19 +46,11 @@
                 <div id="loader">
                     <div id="loading-img">
                         <img class="d-block" src="img/Book.gif">
-                        <p class="d-block">Loading the best image for you !</p>
+                        <p id="message" class="d-block text-center">Loading the best image for you !</p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <footer class="row">
-            <div class="col-md-12">
-                <div class="footer-text">
-                    <p class="text-center">CTRL - 2021</p>
-                </div>
-            </div>
-        </footer>
 
         <div id="hidden-container">
             <img class="img-fluid" id="hidden-image" src="" crossorigin="anonymous">
