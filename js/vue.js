@@ -159,7 +159,8 @@ var appTheme = new Vue({
             { id: 5, text: 'Building' },
             { id: 6, text: 'Boat' },
             { id: 7, text: 'Fire' },
-            { id: 8, text: 'Space' }
+            { id: 8, text: 'Space' },
+            { id: 9, text: 'Sport' }
         ]
     }
 });
