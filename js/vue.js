@@ -38,7 +38,7 @@ function setFirstImage() {
         if (response != null || response != undefined) {
             let json = JSON.parse(response);
             // Get & set image 
-            let img = json.urls.raw;
+            let img = json.urls.regular;
             setBgImage(img);
             fade(loadingContainer);
         }
