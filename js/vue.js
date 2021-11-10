@@ -7,9 +7,11 @@ const imageContainer = document.getElementById("right");
 const menuContainer = document.getElementById("left");
 const hiddenImageSrc = document.getElementById("hidden-image");
 const message = document.getElementById("message");
-
+const paletteContainer = document.getElementById("palette");
+const colorDiv = document.getElementsByClassName("color");
 const colorThief = new ColorThief();
 const image = new Image();
+const error = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
 var color;
 var count = 0;
 
@@ -24,10 +26,43 @@ const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
     return hex.length === 1 ? '0' + hex : hex
 }).join('');
 
-// Function No image
+function handlePalette(palette) {
+    let arrColor = Array.from(palette);
+    console.log("Palette => " + arrColor);
+    for (i = 0; i < palette.length; i++) {
+        let arr = Array.from(palette[i]);
+        let color = rgbToHex(arr[0], arr[1], arr[2]);
+        console.log("Color : " + color);
+        colorDiv[i].style.background = color;
+    }
+}
 
+// Function set color onclick
+function setColor(el) {
+    let bg = el.style.backgroundColor;
+    if (bg != null || bg != undefined) {
+        menuContainer.style.backgroundColor = bg;
+    }
+}
 
-// First image
+// Error message
+function displayError() {
+    message.innerHTML = error;
+    paletteContainer.style.display = "none";
+}
+
+// Function set image
+function setPicture(response) {
+    if (response != null || response != undefined) {
+        let json = JSON.parse(response);
+        // Get & set image 
+        let img = json.urls.regular;
+        setBgImage(img);
+        fade(loadingContainer);
+    }
+}
+
+// First image when loading
 function setFirstImage() {
     unfade(loadingContainer);
     let urlImgTheme = "landscape";
@@ -35,21 +70,18 @@ function setFirstImage() {
     let url = unsplashApiUrl + randomPicture + accessKey + urlParameters + urlImgTheme;
     let response = httpGet(url);
     try {
-        if (response != null || response != undefined) {
-            let json = JSON.parse(response);
-            // Get & set image 
-            let img = json.urls.regular;
-            setBgImage(img);
-            fade(loadingContainer);
-        }
+        setPicture(response);
     } catch (e) {
         console.log(e);
-        message.innerHTML = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
+        displayError();
     }
 }
 
 // Change image theme
 function changeTheme(theme, event) {
+    if (count > 0) {
+        paletteContainer.style.display = "block";
+    }
     unfade(loadingContainer);
     event.preventDefault();
     if (theme == "" || theme == null) {
@@ -59,26 +91,20 @@ function changeTheme(theme, event) {
     url = unsplashApiUrl + randomPicture + accessKey + urlParameters + theme;
     let response = httpGet(url);
     try {
-        if (response != null || response != undefined) {
-            let json = JSON.parse(response);
-            // Get & set image 
-            let img = json.urls.regular;
-            setBgImage(img);
-            fade(loadingContainer);
-
-            image.src = hiddenImageSrc.getAttribute('src');
-            image.onload = function() {
-                var color = colorThief.getColor(hiddenImageSrc);
-                console.log("Test colors = " + "'rgb(" + color + ")'");
-                let arr = Array.from(color);
-                menuContainer.style.backgroundColor = rgbToHex(arr[0], arr[1], arr[2]);
-            };
+        setPicture(response);
+        image.src = hiddenImageSrc.getAttribute('src');
+        image.onload = function() {
+            var color = colorThief.getColor(hiddenImageSrc);
+            var palette = colorThief.getPalette(hiddenImageSrc);
+            console.log("Dominant Color = " + "'rgb(" + color + ")'");
+            let arr = Array.from(color);
+            menuContainer.style.backgroundColor = rgbToHex(arr[0], arr[1], arr[2]);
+            handlePalette(palette);
         }
     } catch (e) {
         console.log(e);
-        message.innerHTML = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
+        displayError();
     }
-
 }
 
 // Function get Response from URL
@@ -88,8 +114,6 @@ function httpGet(url) {
     xmlHttp.send(null);
     return xmlHttp.responseText;
 }
-
-// Set image to hidden container
 
 // Set this image to bg-img in right Column
 function setBgImage(img) {

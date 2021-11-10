@@ -37,9 +37,25 @@
                 <div id="theme-input">
                     <form>
                         <label class="form-label m-2">Or choose a custom theme</label>
-                        <input id="input-theme" class="form-control m-2" type="text">
+                        <input id="input-theme" class="form-control m-2" type="text" placeholder="Your theme">
                         <button id="submit-theme" onclick="changeTheme(document.getElementById('input-theme').value, event)" class="btn btn-light m-2">Submit</button>
                     </form>
+                </div>
+                <div id="palette">
+                    <h2>Color Palette</h2>
+                    <div id="color-palette">
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                        <div class="color" onclick="setColor(this)"></div>
+                    </div>
+
                 </div>
             </div>
             <div class="col-md-8" id="right">
