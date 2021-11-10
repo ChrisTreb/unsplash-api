@@ -15,6 +15,16 @@ const error = "An error has occured !<br>Rate limit excedeed or picture not foun
 var color;
 var count = 0;
 
+// Help buttons
+var popover2 = new bootstrap.Popover(document.querySelector('.help-2'), {
+    container: 'body'
+});
+
+// Help buttons
+var popover3 = new bootstrap.Popover(document.querySelector('.help-3'), {
+    container: 'body'
+});
+
 // Set first image
 window.addEventListener('load', function() {
     setFirstImage();
