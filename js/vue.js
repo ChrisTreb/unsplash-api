@@ -12,7 +12,6 @@ const colorDiv = document.getElementsByClassName("color");
 const colorHexPar = document.getElementsByClassName("color-hex");
 const colorThief = new ColorThief();
 const image = new Image();
-const error = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
 var color;
 var count = 0;
 
@@ -63,8 +62,8 @@ function setColor(el) {
 }
 
 // Error message
-function displayError() {
-    message.innerHTML = error;
+function displayError(response) {
+    message.innerHTML = response;
     paletteContainer.style.display = "none";
 }
 
@@ -90,7 +89,7 @@ function setFirstImage() {
         setPicture(response);
     } catch (e) {
         console.log(e);
-        displayError();
+        displayError(response);
     }
 }
 
@@ -120,15 +119,17 @@ function changeTheme(theme, event) {
         }
     } catch (e) {
         console.log(e);
-        displayError();
+        displayError(response);
     }
 }
 
 // Function get Response from URL
 function httpGet(url) {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", url, false); // false for synchronous request
     xmlHttp.send(null);
+    let status = xmlHttp.status;
+    console.log("req status => " + status);
     return xmlHttp.responseText;
 }
 
