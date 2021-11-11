@@ -9,6 +9,7 @@ const hiddenImageSrc = document.getElementById("hidden-image");
 const message = document.getElementById("message");
 const paletteContainer = document.getElementById("palette");
 const colorDiv = document.getElementsByClassName("color");
+const colorHexPar = document.getElementsByClassName("color-hex");
 const colorThief = new ColorThief();
 const image = new Image();
 const error = "An error has occured !<br>Rate limit excedeed or picture not found...<br>Try again.";
@@ -39,11 +40,17 @@ const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
 function handlePalette(palette) {
     let arrColor = Array.from(palette);
     console.log("Palette => " + arrColor);
-    for (i = 0; i < palette.length; i++) {
+    for (a = 0; a < colorHexPar; a++) {
+        console.log("Length =>" + colorHexPar.length);
+        colorHexPar[a].innerHTML = "";
+    }
+
+    for (i = 0; i < colorDiv.length; i++) {
         let arr = Array.from(palette[i]);
         let color = rgbToHex(arr[0], arr[1], arr[2]);
         console.log("Color : " + color);
         colorDiv[i].style.background = color;
+        colorHexPar[i].innerHTML = color;
     }
 }
 
